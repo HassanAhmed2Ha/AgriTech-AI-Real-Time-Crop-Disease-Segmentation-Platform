@@ -1,0 +1,6 @@
+{
+  "name": "YOLOv11 Benchmark",
+  "description": "A native Android benchmarking app for YOLOv11 instance segmentation using ONNX Runtime.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
