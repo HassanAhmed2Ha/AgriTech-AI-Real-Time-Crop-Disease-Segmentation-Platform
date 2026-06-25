@@ -50,6 +50,23 @@ graph TD
     H -.->|BackgroundTasks| K((Weights & Biases<br>Telemetry Log)):::mlops
 ```
 
+### Infrastructure & Deployment Architecture
+
+The system's physical and cloud deployment topology is structured to guarantee high availability and automated builds.
+
+```mermaid
+graph LR
+    classDef infra fill:#fcfcfa,stroke:#d4c4a8,stroke-width:2px,color:#333;
+    classDef cloud fill:#fdfbf7,stroke:#b5a68a,stroke-width:2px,color:#333;
+
+    A[GitHub Repository<br>Version Control]:::infra --> B[Docker SDK<br>Image Build]:::infra
+    A --> C[Android Gradle<br>APK Build]:::infra
+    B --> D[Hugging Face Spaces<br>Container Registry & Runtime]:::cloud
+    D -.-> E((Weights & Biases<br>Cloud Observability)):::cloud
+    C --> F[Local Android Device<br>Client Edge]:::infra
+    F <-->|HTTPS API Traffic| D
+```
+
 ### Directory Structure
 
 <details>
@@ -229,15 +246,9 @@ Compile the mobile client using the Gradle wrapper, injecting secrets directly i
 
 ## 8. About the Developer
 
-This architecture wasn't just built to process data; it was engineered to fulfill a deeply rooted mission.
-
-**Developer:** Hassan Ahmed Hassan Zaki Deraz *(Born 2007 | Bioinformatics & Data Science, Alexandria University)*
-
-The spark for this technology ignited far from the fields of agriculture. As a child, an obsession with medical documentaries—watching the precise ballet of neurosurgery and the miraculous mechanics of organ transplants—bred a desperate drive to save lives. That drive was tested early. The struggle meant enduring brutal, minimum-wage shifts as a steward simply to afford a passport, while relentlessly hunting down rare, desperately needed medication for a neighbor's epileptic child.
-
-Life's trajectory shifted when the traditional path to medical school closed. But the mission to heal did not die; it evolved. By diving relentlessly into Bioinformatics, Data Science, and Agriculture at Alexandria University, an epiphany struck: Healing crops and securing the global food supply with artificial intelligence is simply neurosurgery executed on a planetary scale. 
-
-The dream wasn't lost. It just changed form.
+**Developer:** Hassan Ahmed Hassan Zaki  
+**Title:** Bioinformatics & AI Student, Alexandria University  
+**Interests:** Computer Vision, Precision Agriculture, MLOps, and AI for Healthcare & Sustainability.
 
 * **LinkedIn:** [Hassan Ahmed](https://www.linkedin.com/in/hassan-ahmed2007/)
 * **Portfolio:** [Hassan's Technical Portfolio](https://hassan-ahmed-portfolio.vercel.app/)
