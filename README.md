@@ -1,21 +1,76 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# AgriTech Crop Disease Detector
 
-# Run and deploy your AI Studio app
+A real-time crop disease detection system with an Android MVVM client and a
+cloud-deployable FastAPI inference backend.
 
-This contains everything you need to run your app locally.
+## Architecture
 
-View your app in AI Studio: https://ai.studio/apps/093deba0-cf73-484d-8bd8-c87874c495d4
+```
+Android App (CameraX + Compose MVVM)
+         │
+         │  POST /api/v1/detect  (multipart JPEG)
+         ▼
+FastAPI Backend (YOLOv11 segmentation)
+         │
+         │  JSON DetectionResponse
+         ▼
+Android App (renders bounding boxes + masks over live camera feed)
+```
 
-## Run Locally
+## Project Structure
 
-**Prerequisites:**  [Android Studio](https://developer.android.com/studio)
+```
+YOLOv11-Benchmark-APP/
+├── app/                          # Android application module
+│   └── src/main/java/com/aistudio/agritech/
+│       ├── MainActivity.kt       # Entry point; initializes ApiClient
+│       ├── data/
+│       │   ├── model/
+│       │   │   └── Detection.kt  # Domain model for a single detection
+│       │   └── remote/
+│       │       ├── ApiClient.kt          # OkHttp + Retrofit singleton
+│       │       ├── ApiService.kt         # Retrofit interface (/detect)
+│       │       └── DetectionResponse.kt  # Moshi API response models
+│       ├── ui/
+│       │   ├── components/
+│       │   │   ├── CameraPreviewOverlay.kt  # CameraX live feed
+│       │   │   └── DetectionOverlay.kt      # Bounding box + mask renderer
+│       │   └── theme/
+│       │       ├── Color.kt
+│       │       ├── Theme.kt
+│       │       └── Type.kt
+│       └── viewmodel/
+│           └── BenchmarkViewModel.kt     # Coordinates API calls & metrics
+│
+└── backend/                      # FastAPI inference server
+    ├── main.py                   # Server entry point + /detect endpoint
+    ├── schemas.py                # Pydantic request/response models
+    ├── requirements.txt          # Python dependencies
+    └── README.md                 # Backend setup & API docs
+```
 
+## Quick Start
 
-1. Open Android Studio
-2. Select **Open** and choose the directory containing this project
-3. Allow Android Studio to fix any incompatibilities as it imports the project.
-4. Create a file named `.env` in the project directory and set `GEMINI_API_KEY` in that file to your Gemini API key (see `.env.example` for an example)
-5. Remove this line from the app's `build.gradle.kts` file: `signingConfig = signingConfigs.getByName("debugConfig")`
-6. Run the app on an emulator or physical device
+### Android Client
+
+1. Open the project in Android Studio.
+2. Copy `.env.example` to `.env` and set `AGRITECH_API_URL` to your server's URL.
+3. Build and run on a device or emulator with a camera.
+
+### Backend Server
+
+```bash
+cd backend/
+pip install -r requirements.txt
+# Place model weights at backend/weights/yolo11s-seg.pt
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+```
+
+See [backend/README.md](backend/README.md) for detailed configuration.
+
+## Environment Variables
+
+| Variable | Description |
+|---|---|
+| `AGRITECH_API_URL` | Base URL of the FastAPI server (e.g. `http://192.168.1.100:8000/api/v1/`) |
+| `GEMINI_API_KEY` | Gemini API key for AI Studio integration (optional) |

@@ -1,0 +1,26 @@
+# ── PyTorch CPU Index (CRITICAL FOR HUGGING FACE FREE TIER) ─────────────
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+# ── API Server ──────────────────────────────────────────────────────────
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+
+# ── Request validation & serialization ──────────────────────────────────
+pydantic==2.8.2
+python-multipart==0.0.9
+
+# ── Image processing ────────────────────────────────────────────────────
+Pillow==10.4.0
+numpy==1.26.4
+opencv-python-headless==4.10.0.84   # CRITICAL: Prevents libGL errors on servers
+
+# ── YOLOv11 & AI Engine (Forces CPU version) ────────────────────────────
+torch==2.4.1+cpu
+torchvision==0.19.1+cpu
+ultralytics==8.3.0
+
+# ── Deployment (Monitoring ML Ops ) ─────────────────────────────
+wandb==0.17.0
+
+# ── Environment variable management ─────────────────────────────────────
+python-dotenv==1.0.1

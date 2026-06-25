@@ -1,1 +1,0 @@
-yolo11s_seg_fp16.onnx placeholder content. For real inference, replace this file with the actual yolo11s_seg_fp16.onnx model file (approx 20MB) in your assets folder.

@@ -16,3 +16,14 @@
 local.properties
 .env
 debug.keystore
+.Agri_Tech_Yolo/
+__pycache__/
+*.pyc
+.env
+.venv/
+env/
+venv/
+*.pt
+.vscode/
+build/
+dist/

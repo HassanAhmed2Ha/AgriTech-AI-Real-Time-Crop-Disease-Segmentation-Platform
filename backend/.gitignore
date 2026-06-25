@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+
+# Weights (uploaded separately via Git LFS or Space secrets)
+weights/*.pt
+weights/*.onnx
+
+# Environment secrets
+.env
+
+# W&B local runs
+wandb/
+
+# IDE
+.idea/
+.vscode/
