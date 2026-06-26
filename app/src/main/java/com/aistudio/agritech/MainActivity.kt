@@ -33,14 +33,17 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.BorderStroke as M3BorderStroke
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -125,6 +128,7 @@ fun AgriTechBenchmarkScreen() {
         // ── Layer 1: Full-screen live camera feed ──────────────────────────
         CameraPreviewOverlay(
             modifier = Modifier.fillMaxSize(),
+            isAnalyzing = viewModel.isAnalyzing,
             onFrameCaptured = { bitmap, frameStartMs ->
                 viewModel.analyzeFrame(bitmap, frameStartMs)
             }
@@ -141,11 +145,7 @@ fun AgriTechBenchmarkScreen() {
             apiStatus = apiStatus,
             batteryLevel = batteryLevel,
             isCharging = isCharging,
-            memoryUsageMB = memoryUsageMB,
-            onInfoClick = {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://hassan-ahmed-portfolio.vercel.app"))
-                context.startActivity(intent)
-            }
+            memoryUsageMB = memoryUsageMB
         )
 
         // ── Layer 4: REC badge (visible only while logging) ───────────────
@@ -218,9 +218,9 @@ private fun TopStatusBar(
     apiStatus: String,
     batteryLevel: Int,
     isCharging: Boolean,
-    memoryUsageMB: Long,
-    onInfoClick: () -> Unit
+    memoryUsageMB: Long
 ) {
+    val context = LocalContext.current
     val infiniteTransition = rememberInfiniteTransition(label = "ledBlink")
     val blinkAlpha by infiniteTransition.animateFloat(
         initialValue = 0.35f,
@@ -233,6 +233,7 @@ private fun TopStatusBar(
     )
 
     val isConnected = apiStatus.startsWith("API Connected")
+    var menuExpanded by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -293,12 +294,54 @@ private fun TopStatusBar(
                     )
                 }
                 Spacer(modifier = Modifier.width(8.dp))
-                IconButton(onClick = onInfoClick) {
-                    Icon(
-                        imageVector = Icons.Default.Info,
-                        contentDescription = "About / Portfolio",
-                        tint = Color.White
-                    )
+                // Info icon that toggles the dropdown menu
+                Box {
+                    IconButton(onClick = { menuExpanded = true }) {
+                        Icon(
+                            imageVector = Icons.Default.Info,
+                            contentDescription = "Developer Links",
+                            tint = Color.White
+                        )
+                    }
+                    DropdownMenu(
+                        expanded = menuExpanded,
+                        onDismissRequest = { menuExpanded = false }
+                    ) {
+                        DropdownMenuItem(
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Default.Star,
+                                    contentDescription = "GitHub Repository"
+                                )
+                            },
+                            text = { Text("GitHub Repository") },
+                            onClick = {
+                                menuExpanded = false
+                                val intent = Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse("https://github.com/HassanAhmed2Ha/AgriTech-AI-Real-Time-Crop-Disease-Segmentation-Platform")
+                                )
+                                context.startActivity(intent)
+                            }
+                        )
+                        DropdownMenuItem(
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Default.Person,
+                                    contentDescription = "Developer Portfolio"
+                                )
+                            },
+                            text = { Text("Developer Portfolio") },
+                            onClick = {
+                                menuExpanded = false
+                                val intent = Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse("https://hassan-ahmed-portfolio.vercel.app/")
+                                )
+                                context.startActivity(intent)
+                            }
+                        )
+                    }
                 }
             }
         }

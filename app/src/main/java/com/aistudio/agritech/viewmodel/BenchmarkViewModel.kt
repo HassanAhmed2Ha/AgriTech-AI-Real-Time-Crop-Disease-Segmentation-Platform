@@ -107,6 +107,8 @@ class BenchmarkViewModel(application: Application) : AndroidViewModel(applicatio
     private val _currentDetections = MutableStateFlow<List<Detection>>(emptyList())
     val currentDetections: StateFlow<List<Detection>> = _currentDetections.asStateFlow()
 
+    val isAnalyzing = java.util.concurrent.atomic.AtomicBoolean(false)
+
     init {
         updateSystemMetrics()
         refreshRecentLogs()
@@ -142,13 +144,16 @@ class BenchmarkViewModel(application: Application) : AndroidViewModel(applicatio
                     body = requestBody
                 )
 
+                val dispatchStartMs = System.currentTimeMillis()
                 val response = ApiClient.service.detectDisease(imagePart)
                 val frameEndMs = System.currentTimeMillis()
                 val e2e = frameEndMs - frameStartMs
+                val latency = frameEndMs - dispatchStartMs
 
                 if (response.isSuccessful) {
                     val body = response.body()
                     if (body != null) {
+                        Log.d("AGRITECH_PERF", "Cloud Inference Latency: ${latency}ms")
                         val serverInferenceMs = body.inferenceMs
                         val networkMs = (e2e - serverInferenceMs).coerceAtLeast(0L)
 
@@ -176,18 +181,29 @@ class BenchmarkViewModel(application: Application) : AndroidViewModel(applicatio
                             _currentDetections.value = detections
                             _apiStatus.value = "API Connected · ${body.modelVersion}"
                         }
+                    } else {
+                        withContext(Dispatchers.Main) {
+                            _currentDetections.value = emptyList()
+                            _activeDetectionsCount.value = 0
+                        }
                     }
                 } else {
                     Log.w("BenchmarkViewModel", "API error ${response.code()}: ${response.message()}")
                     withContext(Dispatchers.Main) {
                         _apiStatus.value = "API Error ${response.code()}"
+                        _currentDetections.value = emptyList()
+                        _activeDetectionsCount.value = 0
                     }
                 }
             } catch (e: Exception) {
                 Log.e("BenchmarkViewModel", "Frame analysis failed: ${e.message}")
                 withContext(Dispatchers.Main) {
                     _apiStatus.value = "Disconnected — ${e.javaClass.simpleName}"
+                    _currentDetections.value = emptyList()
+                    _activeDetectionsCount.value = 0
                 }
+            } finally {
+                isAnalyzing.set(false)
             }
         }
     }

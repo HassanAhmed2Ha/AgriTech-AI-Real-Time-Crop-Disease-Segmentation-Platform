@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🌿 AgriTech AI: Crop Disease Detector
+# 🌿 AgriTech AI: Real-Time Crop Disease Segmentation Platform
 
 ### Democratizing Edge-AI: Real-Time Instance Segmentation & Agricultural Telemetry
 
@@ -25,6 +25,17 @@ The **AgriTech AI Crop Disease Detector** represents a fundamental architectural
 We solved this by **Democratizing Edge-AI**. This architecture aggressively decouples the mathematical violence of deep learning tensor operations from the mobile client. By offloading the dense matrix multiplications to a robust, containerized cloud backend, the mobile device is repurposed into a pure sensory node and a hyper-fast rendering engine.
 
 When a farmer points their phone at a decaying leaf, the device compresses the viewport, dispatches a secure remote procedure call, and awaits a highly structured JSON geometry payload. The result is a buttery-smooth 60 FPS augmented reality interface, delivering zero-compromise precision agriculture to the very edge of the network, regardless of the user's hardware.
+
+---
+
+## 📱 App Showcase
+
+<div align="center">
+  <img src="demo_screenshot.jpeg" alt="AgriTech Segmentation Demo 1" width="45%" />
+  &nbsp;
+  <img src="demo_screenshot_1.jpeg" alt="AgriTech Segmentation Demo 2" width="45%" />
+  <p><i>Live on-device rendering of YOLOv11 segmentation masks via Jetpack Compose Canvas.</i></p>
+</div>
 
 ---
 

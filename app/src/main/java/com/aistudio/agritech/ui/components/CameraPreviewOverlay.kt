@@ -60,6 +60,7 @@ import java.util.concurrent.Executors
 @Composable
 fun CameraPreviewOverlay(
     modifier: Modifier = Modifier,
+    isAnalyzing: java.util.concurrent.atomic.AtomicBoolean,
     onFrameCaptured: (bitmap: Bitmap, frameStartMs: Long) -> Unit
 ) {
     val context = LocalContext.current
@@ -113,6 +114,11 @@ fun CameraPreviewOverlay(
                     .build()
 
                 imageAnalysis.setAnalyzer(cameraExecutor) { imageProxy ->
+                    if (isAnalyzing.get()) {
+                        imageProxy.close()
+                        return@setAnalyzer
+                    }
+
                     val frameStartMs = System.currentTimeMillis()
 
                     val bitmap = try {
@@ -123,6 +129,7 @@ fun CameraPreviewOverlay(
                     }
 
                     if (bitmap != null) {
+                        isAnalyzing.set(true)
                         onFrameCaptured(bitmap, frameStartMs)
                     }
 
