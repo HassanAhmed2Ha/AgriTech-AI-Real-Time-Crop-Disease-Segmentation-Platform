@@ -13,6 +13,7 @@
 [![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?logo=docker&logoColor=white)](https://docker.com)
 [![Hugging Face](https://img.shields.io/badge/Hugging_Face-Spaces-FFD21E?logo=huggingface&logoColor=black)](https://huggingface.co)
 [![Weights & Biases](https://img.shields.io/badge/Weights_&_Biases-MLOps-FFBE00?logo=weightsandbiases&logoColor=black)](https://wandb.ai)
+<br><br>[![Download APK](https://img.shields.io/badge/Download_APK-Android-3DDC84?logo=android&style=for-the-badge)](https://drive.google.com/file/d/1RXlC0VfmuEW72bLMyflnj2H8zcnVUUXI/view?usp=sharing)
 
 </div>
 
@@ -255,7 +256,15 @@ Compile the mobile client using the Gradle wrapper, injecting secrets directly i
 
 ---
 
-## 8. About the Developer
+## 8. System Limitations & Known Trade-offs
+
+1. **AR Sync Delay (Latency Desynchronization):** Because the YOLOv11 tensor operations are offloaded to the cloud to save mobile battery and memory, there is an inherent ~1.5-second network round-trip latency. While the Android UI renders at 60 FPS, the green segmentation masks drawn on the screen belong to a frame captured ~1.5 seconds ago. Quick camera movements will result in a visual desync.
+2. **Cold Start Penalty:** The Hugging Face Spaces free tier suspends the container after periods of inactivity. The very first API request may take 10–15 seconds to awaken the server before returning to the steady ~1.5s latency state.
+3. **Strict Connectivity Dependence:** Unlike edge-compute (on-device) models, this cloud-reliant architecture requires a stable 3G/4G/Wi-Fi connection. It will not function in offline agricultural dead-zones.
+
+---
+
+## 9. About the Developer
 
 **Developer:** Hassan Ahmed Hassan Zaki  
 **Title:** Bioinformatics & AI Student, Alexandria University  
