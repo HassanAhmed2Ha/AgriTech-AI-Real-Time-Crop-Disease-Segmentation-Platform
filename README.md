@@ -222,6 +222,10 @@ Building an enterprise-grade cloud-edge system required solving several critical
 
 ## 7. Setup & Execution
 
+### 0. Quick Start: Pre-built APK
+If you want to test the app immediately without building it from source, you can install the compiled Android APK directly:  
+👉 **[Download AgriTech Benchmark APK](https://drive.google.com/file/d/1RXlC0VfmuEW72bLMyflnj2H8zcnVUUXI/view?usp=sharing)**
+
 ### 1. Clone the Repository
 ```bash
 git clone https://github.com/HassanAhmed2Hassan/AGRITECH-YOLOv11-Benchmark.git
